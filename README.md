@@ -1,113 +1,96 @@
-Egypt Salary Calculator
+# Egypt Salary Calculator
 
-
-
+[![CI](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/ci.yml)
+[![Azure deployment](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/main_egypt-salary-calculator.yml/badge.svg)](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/main_egypt-salary-calculator.yml)
 
 An Arabic-first, privacy-focused calculator for estimating Egyptian gross and net salaries.
 
-Open the live application
+**[Open the live application](https://egypt-salary-calculator-bfa5hkbubbfpfbet.westeurope-01.azurewebsites.net)**
 
-Features
+## Features
 
-Gross-to-net and net-to-gross calculations
+- Gross-to-net and net-to-gross calculations
+- Monthly and annual salary modes
+- Automatic or manually entered social insurance
+- Income tax, employee insurance, and Martyrs Fund breakdown
+- Monthly and annual summaries
+- Responsive Arabic RTL interface
+- Persistent light and dark themes
+- Accessible validation and keyboard navigation
+- Browser-local calculations with no salary data transmitted or stored
 
-Monthly and annual salary modes
+## Technology
 
-Automatic or manually entered social insurance
+- React 19
+- TypeScript
+- Vite
+- Vitest and Testing Library
+- Oxlint
+- Azure App Service for Linux
+- Node.js 22
+- GitHub Actions CI/CD
+- GitHub OIDC with an Azure managed identity
+- Application Insights and Log Analytics
 
-Income tax, employee insurance, and Martyrs Fund breakdown
+## Deployment architecture
 
-Monthly and annual summaries
-
-Responsive Arabic RTL interface
-
-Persistent light and dark themes
-
-Accessible validation and keyboard navigation
-
-Browser-local calculations with no salary data transmitted or stored
-
-Technology
-
-React 19
-
-TypeScript
-
-Vite
-
-Vitest and Testing Library
-
-Oxlint
-
-Azure App Service for Linux
-
-Node.js 22
-
-GitHub Actions CI/CD
-
-GitHub OIDC with an Azure managed identity
-
-Application Insights and Log Analytics
-
-Deployment architecture
-
+```text
 GitHub main
 ├── CI: tests → lint → production build
 └── CD: build → GitHub OIDC → Azure App Service
                                     ├── Application Insights
                                     └── Log Analytics
+```
 
 Authentication between GitHub and Azure uses workload identity federation. No Azure client secret is stored in the repository.
 
 The Vite production output is served by App Service using:
 
+```text
 pm2 serve /home/site/wwwroot/dist --no-daemon --spa
+```
 
-Calculation approach
+## Calculation approach
 
 The calculation engine currently implements:
 
-Progressive Egyptian employment-income tax brackets
-
-High-income bracket exclusions
-
-EGP 20,000 annual personal exemption
-
-11% employee social-insurance contribution
-
-2026 monthly insurable-wage limits
-
-Martyrs Fund deduction
-
-Net-to-gross calculation using binary search
+- Progressive Egyptian employment-income tax brackets
+- High-income bracket exclusions
+- EGP 20,000 annual personal exemption
+- 11% employee social-insurance contribution
+- 2026 monthly insurable-wage limits
+- Martyrs Fund deduction
+- Net-to-gross calculation using binary search
 
 The automated test suite currently contains 55 calculation and interface tests.
 
-Run locally
+## Run locally
 
+```bash
 git clone https://github.com/yossefseit/egypt-salary-calculator.git
 cd egypt-salary-calculator
 npm ci
 npm run dev
+```
 
-Quality checks
+## Quality checks
 
+```bash
 npm test
 npm run lint
 npm run build
+```
 
-Reference sources
+## Reference sources
 
-Egyptian Income Tax Law No. 7 of 2024
+- [Egyptian Income Tax Law No. 7 of 2024](https://eta.gov.eg/sites/default/files/2024-03/law_no.7-2024.pdf)
+- [Egyptian Tax Authority payroll forms](https://eta.gov.eg/ar/payroll-forms)
+- [NOSI 2026 insurable-wage limits](https://www.nosi.gov.eg/ar/News/Pages/2025-11-30.aspx)
 
-Egyptian Tax Authority payroll forms
-
-NOSI 2026 insurable-wage limits
-
-Disclaimer
+## Disclaimer
 
 This application provides educational estimates and is not a substitute for professional payroll, tax, or legal advice. Actual payroll may differ because of allowances, bonuses, exemptions, or regulatory changes.
 
-Project status
+## Project status
 
 The MVP is live on Azure. Infrastructure was initially configured through Azure Portal and Azure CLI. Reproducible Bicep infrastructure is planned as the next cloud-engineering phase.
