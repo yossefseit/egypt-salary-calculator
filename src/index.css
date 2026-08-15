@@ -1,11 +1,68 @@
-:root {
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-page: #f3f3f1;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f7f7f5;
+  --color-text: #202124;
+  --color-muted: #62666b;
+  --color-border: #d9d9d5;
+  --color-border-strong: #b8bbb8;
+  --color-accent: #285e50;
+  --color-accent-hover: #1f4b40;
+  --color-accent-soft: #e8f1ee;
+  --color-accent-contrast: #ffffff;
+  --color-focus: #0969c3;
+  --color-danger: #a42636;
+  --color-danger-soft: #fff0f1;
+  --shadow-card: 0 1rem 3rem rgb(22 27 25 / 7%);
   font-family: Tahoma, Arial, system-ui, sans-serif;
-  color: #202124;
-  background: #f3f3f1;
+  color: var(--color-text);
+  background: var(--color-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --color-page: #101315;
+    --color-surface: #191d20;
+    --color-surface-subtle: #22272a;
+    --color-text: #f3f5f4;
+    --color-muted: #b5bcb9;
+    --color-border: #3a4140;
+    --color-border-strong: #58605e;
+    --color-accent: #94c7b8;
+    --color-accent-hover: #add8cc;
+    --color-accent-soft: #203630;
+    --color-accent-contrast: #10241e;
+    --color-focus: #79bfff;
+    --color-danger: #ff9ca7;
+    --color-danger-soft: #3b2227;
+    --shadow-card: 0 1rem 3rem rgb(0 0 0 / 22%);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-page: #101315;
+  --color-surface: #191d20;
+  --color-surface-subtle: #22272a;
+  --color-text: #f3f5f4;
+  --color-muted: #b5bcb9;
+  --color-border: #3a4140;
+  --color-border-strong: #58605e;
+  --color-accent: #94c7b8;
+  --color-accent-hover: #add8cc;
+  --color-accent-soft: #203630;
+  --color-accent-contrast: #10241e;
+  --color-focus: #79bfff;
+  --color-danger: #ff9ca7;
+  --color-danger-soft: #3b2227;
+  --shadow-card: 0 1rem 3rem rgb(0 0 0 / 22%);
 }
 
 * {
@@ -14,11 +71,29 @@
 
 html {
   min-width: 20rem;
-  background: #f3f3f1;
+  min-height: 100%;
+  background: var(--color-page);
 }
 
 body {
   min-width: 20rem;
   min-height: 100vh;
   margin: 0;
+  color: var(--color-text);
+  background: var(--color-page);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
 }
