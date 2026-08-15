@@ -86,7 +86,7 @@ describe('salary calculator UI', () => {
       )
     })
     expect(fetch).toHaveBeenCalledWith(
-      '/api/GetUsdEgpRate',
+      'https://func-egsalary-prod-weu-001.azurewebsites.net/api/GetUsdEgpRate',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
       }),
