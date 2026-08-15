@@ -85,12 +85,14 @@ describe('salary calculator UI', () => {
         '≈ USD 165.19',
       )
     })
-    expect(fetch).toHaveBeenCalledWith(
-      '/api/GetUsdEgpRate',
-      expect.objectContaining({
-        headers: { Accept: 'application/json' },
-      }),
-    )
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '')
+
+expect(fetch).toHaveBeenCalledWith(
+  `${apiBaseUrl}/api/GetUsdEgpRate`,
+  expect.objectContaining({
+    headers: { Accept: 'application/json' },
+  }),
+)
   })
 
   it('accepts plain and comma-formatted salary amounts', async () => {
