@@ -376,6 +376,26 @@
   unicode-bidi: isolate;
 }
 
+.usd-equivalent {
+  display: grid;
+  gap: 0.25rem;
+  margin-block-start: 0.65rem;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px solid
+    color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.result-highlight .usd-equivalent__value {
+  color: var(--color-text);
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  font-weight: 800;
+}
+
+.result-highlight .usd-equivalent span {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

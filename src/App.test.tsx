@@ -24,10 +24,27 @@ function stubSystemTheme(prefersDark: boolean): void {
   })
 }
 
+function stubExchangeRate(): void {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        baseCurrency: 'USD',
+        quoteCurrency: 'EGP',
+        rate: 50.259,
+        date: '2026-08-14',
+        source: 'Frankfurter blended reference rate',
+      }),
+    }),
+  )
+}
+
 beforeEach(() => {
   window.localStorage.clear()
   delete document.documentElement.dataset.theme
   stubSystemTheme(false)
+  stubExchangeRate()
 })
 
 afterEach(() => {
@@ -35,6 +52,7 @@ afterEach(() => {
   window.localStorage.clear()
   delete document.documentElement.dataset.theme
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
 describe('salary calculator UI', () => {
@@ -50,6 +68,28 @@ describe('salary calculator UI', () => {
     expect(screen.getByText('المرتب الصافي المحسوب')).toBeTruthy()
     expect(screen.getByTestId('highlight-value').textContent).toBe(
       'EGP 8,302.50',
+    )
+  })
+
+  it('shows the calculated salary in USD using the API rate', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('textbox', { name: 'قيمة المرتب الإجمالي' }),
+      '10000',
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('usd-equivalent').textContent).toBe(
+        '≈ USD 165.19',
+      )
+    })
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/GetUsdEgpRate',
+      expect.objectContaining({
+        headers: { Accept: 'application/json' },
+      }),
     )
   })
 
