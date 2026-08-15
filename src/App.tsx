@@ -86,14 +86,32 @@ function formatEgp(value: number): string {
   return `EGP ${numberFormatter.format(normalizedValue)}`
 }
 
+function parseMoneyInput(value: string): number | null {
+  const trimmedValue = value.trim()
+
+  if (trimmedValue === '') {
+    return null
+  }
+
+  const moneyPattern = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?$/
+
+  if (!moneyPattern.test(trimmedValue)) {
+    return null
+  }
+
+  const numericValue = Number(trimmedValue.replaceAll(',', ''))
+
+  return Number.isFinite(numericValue) ? numericValue : null
+}
+
 function convertPeriodValue(value: string, multiplier: number): string {
   if (value.trim() === '') {
     return value
   }
 
-  const numericValue = Number(value)
+  const numericValue = parseMoneyInput(value)
 
-  if (!Number.isFinite(numericValue)) {
+  if (numericValue === null) {
     return value
   }
 
@@ -117,9 +135,9 @@ function getCalculationState(
     return { status: 'empty' }
   }
 
-  const salary = Number(salaryInput)
+  const salary = parseMoneyInput(salaryInput)
 
-  if (!Number.isFinite(salary)) {
+  if (salary === null) {
     return {
       status: 'error',
       field: 'salary',
@@ -146,9 +164,9 @@ function getCalculationState(
       }
     }
 
-    const manualInsurance = Number(manualInsuranceInput)
+    const manualInsurance = parseMoneyInput(manualInsuranceInput)
 
-    if (!Number.isFinite(manualInsurance)) {
+    if (manualInsurance === null) {
       return {
         status: 'error',
         field: 'manual-insurance',
@@ -427,10 +445,8 @@ function App() {
                   <input
                     id="salary-amount"
                     name="salary"
-                    type="number"
+                    type="text"
                     inputMode="decimal"
-                    min="0"
-                    step="any"
                     autoComplete="off"
                     placeholder="10000"
                     value={salaryInput}
@@ -472,10 +488,8 @@ function App() {
                     <input
                       id="manual-insurance"
                       name="manual-insurance"
-                      type="number"
+                      type="text"
                       inputMode="decimal"
-                      min="0"
-                      step="any"
                       autoComplete="off"
                       placeholder={period === 'monthly' ? '1100' : '13200'}
                       value={manualInsuranceInput}
