@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VITE_API_BASE_URL: https://func-egsalary-prod-weu-001.azurewebsites.net
     permissions:
       contents: read #This is required for actions/checkout
 

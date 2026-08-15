@@ -7,6 +7,10 @@ import {
   type SalaryCalculationResult,
   type SalaryPeriod,
 } from './domain/salaryCalculator'
+import {
+  getUsdEgpRate,
+  type UsdEgpRate,
+} from './services/exchangeRate'
 import './App.css'
 
 type Theme = 'light' | 'dark'
@@ -20,6 +24,11 @@ type CalculationViewState =
       readonly message: string
     }
   | { readonly status: 'success'; readonly result: SalaryCalculationResult }
+
+type ExchangeRateViewState =
+  | { readonly status: 'loading' }
+  | { readonly status: 'error' }
+  | { readonly status: 'success'; readonly data: UsdEgpRate }
 
 interface ToggleOption<T extends string> {
   readonly value: T
@@ -86,14 +95,38 @@ function formatEgp(value: number): string {
   return `EGP ${numberFormatter.format(normalizedValue)}`
 }
 
+function formatUsd(value: number): string {
+  const normalizedValue = Object.is(value, -0) ? 0 : value
+
+  return `USD ${numberFormatter.format(normalizedValue)}`
+}
+
+function parseMoneyInput(value: string): number | null {
+  const trimmedValue = value.trim()
+
+  if (trimmedValue === '') {
+    return null
+  }
+
+  const moneyPattern = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?$/
+
+  if (!moneyPattern.test(trimmedValue)) {
+    return null
+  }
+
+  const numericValue = Number(trimmedValue.replaceAll(',', ''))
+
+  return Number.isFinite(numericValue) ? numericValue : null
+}
+
 function convertPeriodValue(value: string, multiplier: number): string {
   if (value.trim() === '') {
     return value
   }
 
-  const numericValue = Number(value)
+  const numericValue = parseMoneyInput(value)
 
-  if (!Number.isFinite(numericValue)) {
+  if (numericValue === null) {
     return value
   }
 
@@ -117,9 +150,9 @@ function getCalculationState(
     return { status: 'empty' }
   }
 
-  const salary = Number(salaryInput)
+  const salary = parseMoneyInput(salaryInput)
 
-  if (!Number.isFinite(salary)) {
+  if (salary === null) {
     return {
       status: 'error',
       field: 'salary',
@@ -146,9 +179,9 @@ function getCalculationState(
       }
     }
 
-    const manualInsurance = Number(manualInsuranceInput)
+    const manualInsurance = parseMoneyInput(manualInsuranceInput)
 
-    if (!Number.isFinite(manualInsurance)) {
+    if (manualInsurance === null) {
       return {
         status: 'error',
         field: 'manual-insurance',
@@ -294,10 +327,28 @@ function App() {
     useState<InsuranceSelection['mode']>('automatic')
   const [manualInsuranceInput, setManualInsuranceInput] = useState('')
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
+  const [exchangeRateState, setExchangeRateState] =
+    useState<ExchangeRateViewState>({ status: 'loading' })
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    void getUsdEgpRate(controller.signal)
+      .then((data) => {
+        setExchangeRateState({ status: 'success', data })
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setExchangeRateState({ status: 'error' })
+        }
+      })
+
+    return () => controller.abort()
+  }, [])
 
   const calculationState = useMemo(
     () =>
@@ -356,6 +407,12 @@ function App() {
     direction === 'gross-to-net'
       ? 'قيمة المرتب الإجمالي'
       : 'قيمة المرتب الصافي'
+  const highlightedSalary =
+    calculationState.status === 'success'
+      ? calculationState.result[
+          period === 'monthly' ? 'monthly' : 'annual'
+        ][direction === 'gross-to-net' ? 'net' : 'gross']
+      : null
 
   return (
     <div className="app-shell">
@@ -427,10 +484,8 @@ function App() {
                   <input
                     id="salary-amount"
                     name="salary"
-                    type="number"
+                    type="text"
                     inputMode="decimal"
-                    min="0"
-                    step="any"
                     autoComplete="off"
                     placeholder="10000"
                     value={salaryInput}
@@ -472,10 +527,8 @@ function App() {
                     <input
                       id="manual-insurance"
                       name="manual-insurance"
-                      type="number"
+                      type="text"
                       inputMode="decimal"
-                      min="0"
-                      step="any"
                       autoComplete="off"
                       placeholder={period === 'monthly' ? '1100' : '13200'}
                       value={manualInsuranceInput}
@@ -544,13 +597,39 @@ function App() {
                     aria-live="polite"
                     aria-atomic="true"
                   >
-                    {formatEgp(
-                      calculationState.result[
-                        period === 'monthly' ? 'monthly' : 'annual'
-                      ][direction === 'gross-to-net' ? 'net' : 'gross'],
-                    )}
+                    {formatEgp(highlightedSalary ?? 0)}
                   </output>
                   <span>{period === 'monthly' ? 'شهريًا' : 'سنويًا'}</span>
+
+                  <div className="usd-equivalent" aria-live="polite">
+                    {exchangeRateState.status === 'loading' && (
+                      <span>جارٍ تحميل سعر الدولار…</span>
+                    )}
+                    {exchangeRateState.status === 'error' && (
+                      <span>تعذر تحميل سعر الدولار حاليًا.</span>
+                    )}
+                    {exchangeRateState.status === 'success' && (
+                      <>
+                        <output
+                          className="usd-equivalent__value"
+                          data-testid="usd-equivalent"
+                          htmlFor="salary-amount"
+                          lang="en"
+                          dir="ltr"
+                        >
+                          ≈{' '}
+                          {formatUsd(
+                            (highlightedSalary ?? 0) /
+                              exchangeRateState.data.rate,
+                          )}
+                        </output>
+                        <span lang="en" dir="ltr">
+                          1 USD = EGP {exchangeRateState.data.rate} ·{' '}
+                          {exchangeRateState.data.date}
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 <div className="summary-grid">

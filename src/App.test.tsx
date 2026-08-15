@@ -24,10 +24,27 @@ function stubSystemTheme(prefersDark: boolean): void {
   })
 }
 
+function stubExchangeRate(): void {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        baseCurrency: 'USD',
+        quoteCurrency: 'EGP',
+        rate: 50.259,
+        date: '2026-08-14',
+        source: 'Frankfurter blended reference rate',
+      }),
+    }),
+  )
+}
+
 beforeEach(() => {
   window.localStorage.clear()
   delete document.documentElement.dataset.theme
   stubSystemTheme(false)
+  stubExchangeRate()
 })
 
 afterEach(() => {
@@ -35,6 +52,7 @@ afterEach(() => {
   window.localStorage.clear()
   delete document.documentElement.dataset.theme
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
 describe('salary calculator UI', () => {
@@ -43,7 +61,7 @@ describe('salary calculator UI', () => {
     render(<App />)
 
     await user.type(
-      screen.getByRole('spinbutton', { name: 'قيمة المرتب الإجمالي' }),
+      screen.getByRole('textbox', { name: 'قيمة المرتب الإجمالي' }),
       '10000',
     )
 
@@ -53,17 +71,63 @@ describe('salary calculator UI', () => {
     )
   })
 
+  it('shows the calculated salary in USD using the API rate', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('textbox', { name: 'قيمة المرتب الإجمالي' }),
+      '10000',
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId('usd-equivalent').textContent).toBe(
+        '≈ USD 165.19',
+      )
+    })
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/GetUsdEgpRate',
+      expect.objectContaining({
+        headers: { Accept: 'application/json' },
+      }),
+    )
+  })
+
+  it('accepts plain and comma-formatted salary amounts', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const salaryInput = screen.getByRole('textbox', {
+      name: 'قيمة المرتب الإجمالي',
+    })
+
+    await user.type(salaryInput, '347475')
+    const expectedResult = screen.getByTestId('highlight-value').textContent
+
+    await user.clear(salaryInput)
+    await user.type(salaryInput, '347,475')
+    expect(screen.getByTestId('highlight-value').textContent).toBe(
+      expectedResult,
+    )
+
+    await user.clear(salaryInput)
+    await user.type(salaryInput, '347,475.00')
+    expect(screen.getByTestId('highlight-value').textContent).toBe(
+      expectedResult,
+    )
+  })
+
   it('converts salary and manual insurance between monthly and yearly', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const salaryInput = screen.getByRole('spinbutton', {
+    const salaryInput = screen.getByRole('textbox', {
       name: 'قيمة المرتب الإجمالي',
     }) as HTMLInputElement
     await user.type(salaryInput, '10000')
     await user.click(screen.getByRole('radio', { name: 'يدوي' }))
 
-    const manualInsuranceInput = screen.getByRole('spinbutton', {
+    const manualInsuranceInput = screen.getByRole('textbox', {
       name: 'قيمة التأمين الاجتماعي اليدوي',
     }) as HTMLInputElement
     await user.type(manualInsuranceInput, '1100')
@@ -82,7 +146,7 @@ describe('salary calculator UI', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const salaryInput = screen.getByRole('spinbutton', {
+    const salaryInput = screen.getByRole('textbox', {
       name: 'قيمة المرتب الإجمالي',
     })
     await user.type(salaryInput, '8302.5')
@@ -91,7 +155,7 @@ describe('salary calculator UI', () => {
     )
 
     expect(
-      screen.getByRole('spinbutton', { name: 'قيمة المرتب الصافي' }),
+      screen.getByRole('textbox', { name: 'قيمة المرتب الصافي' }),
     ).toBeTruthy()
     expect(screen.getByText('المرتب الإجمالي المحسوب')).toBeTruthy()
     expect((salaryInput as HTMLInputElement).value).toBe('8302.5')
@@ -140,7 +204,7 @@ describe('salary calculator UI', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const salaryInput = screen.getByRole('spinbutton', {
+    const salaryInput = screen.getByRole('textbox', {
       name: 'قيمة المرتب الإجمالي',
     })
     await user.type(salaryInput, '-100')
@@ -161,12 +225,12 @@ describe('salary calculator UI', () => {
     render(<App />)
 
     await user.type(
-      screen.getByRole('spinbutton', { name: 'قيمة المرتب الإجمالي' }),
+      screen.getByRole('textbox', { name: 'قيمة المرتب الإجمالي' }),
       '1000',
     )
     await user.click(screen.getByRole('radio', { name: 'يدوي' }))
     await user.type(
-      screen.getByRole('spinbutton', {
+      screen.getByRole('textbox', {
         name: 'قيمة التأمين الاجتماعي اليدوي',
       }),
       '999.5',
