@@ -31,6 +31,10 @@ function isUsdEgpRate(value: unknown): value is UsdEgpRate {
 export async function getUsdEgpRate(
   signal?: AbortSignal,
 ): Promise<UsdEgpRate> {
+  if (import.meta.env.PROD && apiBaseUrl.length === 0) {
+    throw new Error('Exchange-rate API is not configured for this build.')
+  }
+
   const response = await fetch(`${apiBaseUrl}/api/GetUsdEgpRate`, {
     headers: { Accept: 'application/json' },
     signal,
