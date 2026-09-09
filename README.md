@@ -4,16 +4,16 @@
 
 # Egypt Salary Calculator
 
-An Arabic-first calculator that makes Egyptian gross-to-net and net-to-gross salary estimates understandable. The calculation engine runs in the browser and the React client is prepared for static delivery through GitHub Pages; the optional exchange-rate Function remains a separate component.
+An Arabic-first calculator that makes Egyptian gross-to-net and net-to-gross salary estimates understandable. The calculation engine runs in the browser and the React client is delivered statically through GitHub Pages; the optional exchange-rate Function remains a separate component.
 
-**Status: 57 tests passing; GitHub Pages deployment configured** · Evidence reviewed **8 September 2026**.
+**Status: 57 tests passing; deployed to GitHub Pages** · Evidence reviewed **9 September 2026**.
 
 [![CI](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/ci.yml/badge.svg)](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/deploy-pages.yml)
 
 **[Open on GitHub Pages](https://yossefseit.github.io/egypt-salary-calculator/)** · [Case study](https://yossefseit.github.io/projects/egypt-salary-calculator/) · [Code](https://github.com/yossefseit/egypt-salary-calculator) · [Historical Azure deployment](https://github.com/yossefseit/egypt-salary-calculator/actions/runs/31909528455)
 
-The Pages workflow publishes the production `dist/` bundle under `/egypt-salary-calculator/` after tests, lint and build pass. The repository's Pages source was confirmed as **GitHub Actions** on 9 September 2026; publication of this production bundle still requires these changes on `main` and a successful workflow run. The retired Azure App Service workflow completed successfully on **15 August 2026 (UTC)**; that run is retained as dated delivery history, not as current hosting evidence. [Evidence and limits →](docs/validation.md)
+The Pages workflow publishes the production `dist/` bundle under `/egypt-salary-calculator/` after tests, lint and build pass. The production bundle was deployed successfully on **9 September 2026 at 15:25 UTC**, through [Pages run 34370072295](https://github.com/yossefseit/egypt-salary-calculator/actions/runs/34370072295). Live desktop and mobile browser checks confirmed the EGP reference calculation, correct production assets and theme persistence. The retired Azure App Service workflow completed successfully on **15 August 2026 (UTC)**; that run is retained as dated delivery history, not as current hosting evidence. [Evidence and limits →](docs/validation.md)
 
 ## The application
 
