@@ -30,11 +30,10 @@ function stubExchangeRate(): void {
     vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
-        baseCurrency: 'USD',
-        quoteCurrency: 'EGP',
+        base: 'USD',
+        quote: 'EGP',
         rate: 50.259,
         date: '2026-08-14',
-        source: 'Frankfurter blended reference rate',
       }),
     }),
   )
@@ -44,6 +43,7 @@ beforeEach(() => {
   window.localStorage.clear()
   delete document.documentElement.dataset.theme
   stubSystemTheme(false)
+  vi.stubEnv('VITE_API_BASE_URL', '')
   stubExchangeRate()
 })
 
@@ -53,6 +53,7 @@ afterEach(() => {
   delete document.documentElement.dataset.theme
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
 })
 
 describe('salary calculator UI', () => {
@@ -85,14 +86,43 @@ describe('salary calculator UI', () => {
         '≈ USD 165.19',
       )
     })
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '')
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(
+      'https://api.frankfurter.dev/v2/rate/USD/EGP',
+      expect.objectContaining({
+        headers: { Accept: 'application/json' }, credentials: 'omit',
+      }),
+    )
+    expect(screen.getByText('Frankfurter blended reference rate')).toBeTruthy()
+    expect(screen.getByText(/2026-08-14/)).toBeTruthy()
+    expect(screen.getByText('قيمة استرشادية حسب تاريخ السعر، وقد تختلف عن سعر البنك.')).toBeTruthy()
 
-expect(fetch).toHaveBeenCalledWith(
-  `${apiBaseUrl}/api/GetUsdEgpRate`,
-  expect.objectContaining({
-    headers: { Accept: 'application/json' },
-  }),
-)
+  })
+
+
+  it('keeps EGP usable when the reference-rate provider fails', async () => {
+    vi.mocked(fetch).mockRejectedValue(new TypeError('Failed to fetch'))
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('textbox', { name: 'قيمة المرتب الإجمالي' }), '10000')
+    expect(screen.getByTestId('highlight-value').textContent).toBe('EGP 8,302.50')
+    expect(await screen.findByRole('button', { name: 'إعادة تحميل سعر الدولار' })).toBeTruthy()
+    expect(screen.queryByTestId('usd-equivalent')).toBeNull()
+  })
+
+  it('retries a failed rate request without resubmitting the salary', async () => {
+    vi.mocked(fetch).mockRejectedValueOnce(new TypeError('Failed to fetch'))
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByRole('textbox', { name: 'قيمة المرتب الإجمالي' }), '10000')
+    await user.click(await screen.findByRole('button', { name: 'إعادة تحميل سعر الدولار' }))
+    expect((await screen.findByTestId('usd-equivalent')).textContent).toBe('≈ USD 165.19')
+    expect(screen.getByTestId('highlight-value').textContent).toBe('EGP 8,302.50')
+    expect(fetch).toHaveBeenCalledTimes(2)
+    for (const [url, options] of vi.mocked(fetch).mock.calls) {
+      expect(url).toBe('https://api.frankfurter.dev/v2/rate/USD/EGP')
+      expect(options?.body).toBeUndefined()
+    }
+    expect(screen.queryByRole('button', { name: 'إعادة تحميل سعر الدولار' })).toBeNull()
   })
 
   it('accepts plain and comma-formatted salary amounts', async () => {

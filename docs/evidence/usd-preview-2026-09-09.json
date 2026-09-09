@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-09-09T15:41:02.986Z",
+  "url": "http://127.0.0.1:4174/egypt-salary-calculator/",
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rate": {
+        "date": "2026-09-09",
+        "base": "USD",
+        "quote": "EGP",
+        "rate": 51.115
+      },
+      "httpStatus": 200,
+      "net": "EGP 8,302.50",
+      "usd": "≈ USD 162.43",
+      "sourceShown": true,
+      "dateShown": true,
+      "annualConversion": true,
+      "retryAfterSimulatedOutage": true,
+      "salaryTransmitted": false,
+      "axeViolations": 0,
+      "overflow": false,
+      "browserErrorsBeforeSimulatedOutage": [],
+      "requestFailuresBeforeSimulatedOutage": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rate": {
+        "date": "2026-09-09",
+        "base": "USD",
+        "quote": "EGP",
+        "rate": 51.115
+      },
+      "httpStatus": 200,
+      "net": "EGP 8,302.50",
+      "usd": "≈ USD 162.43",
+      "sourceShown": true,
+      "dateShown": true,
+      "annualConversion": true,
+      "retryAfterSimulatedOutage": true,
+      "salaryTransmitted": false,
+      "axeViolations": 0,
+      "overflow": false,
+      "browserErrorsBeforeSimulatedOutage": [],
+      "requestFailuresBeforeSimulatedOutage": []
+    }
+  ]
+}

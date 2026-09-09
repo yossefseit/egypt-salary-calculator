@@ -22,7 +22,7 @@
     <text x="44" y="161" fill="#eef3f6" font-size="45" font-weight="700">Egypt Salary</text>
     <text x="44" y="214" fill="#eef3f6" font-size="45" font-weight="700">Calculator</text>
     <path d="M44 244H670" fill="none" stroke="#2b3d50" stroke-width="2"/>
-    <text x="44" y="280" fill="#75dbed" font-family="monospace" font-size="17">REACT / TYPESCRIPT / GITHUB PAGES / 57 TESTS</text>
+    <text x="44" y="280" fill="#75dbed" font-family="monospace" font-size="17">REACT / TYPESCRIPT / GITHUB PAGES / 80 TESTS</text>
 
     <rect x="790" y="57" width="340" height="216" rx="16" fill="#101d2d" stroke="#2b3d50" stroke-width="2"/>
     <circle cx="822" cy="84" r="6" fill="#d7b572"/>
