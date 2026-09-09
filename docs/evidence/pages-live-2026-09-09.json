@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-09-09T15:26:10.981Z",
+  "report": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "status": 200,
+      "result": "EGP 8,302.50",
+      "reverse": "EGP 9,999.83",
+      "annual": "120000",
+      "themePersisted": "light",
+      "scripts": [
+        "/egypt-salary-calculator/assets/index-DBgRRIFM.js"
+      ],
+      "overflow": false,
+      "axeViolations": 0,
+      "errors": [],
+      "failures": [],
+      "badResponses": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": 200,
+      "result": "EGP 8,302.50",
+      "reverse": "EGP 9,999.83",
+      "annual": "120000",
+      "themePersisted": "light",
+      "scripts": [
+        "/egypt-salary-calculator/assets/index-DBgRRIFM.js"
+      ],
+      "overflow": false,
+      "axeViolations": 0,
+      "errors": [],
+      "failures": [],
+      "badResponses": []
+    }
+  ],
+  "sourceCommit": "1f710b2b5dea7c86df15199ea9dd1f2e7f6e0090",
+  "deploymentRun": "https://github.com/yossefseit/egypt-salary-calculator/actions/runs/34370072295",
+  "destination": "https://yossefseit.github.io/egypt-salary-calculator/",
+  "reverseScenario": "EGP 8,302.50 net with EGP 1,100 manual monthly insurance; the engine returns the minimal gross within its rounding rules."
+}
