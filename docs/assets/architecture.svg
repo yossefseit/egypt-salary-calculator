@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Egypt Salary Calculator delivery and runtime architecture</title>
+  <desc id="desc">GitHub main feeds independent quality and GitHub Pages deployment workflows. Pages serves the static React application at its repository path. Salary calculation stays in the browser; the optional dotnet exchange-rate Function requires separate hosting and configuration.</desc>
+  <defs>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#294155" stroke-width=".7" opacity=".24"/>
+    </pattern>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#75dbed"/>
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 10 5 0 10Z" fill="#d7b572"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="760" rx="18" fill="#09111e"/>
+  <rect width="1200" height="760" rx="18" fill="url(#grid)"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="48" y="54" fill="#eef3f6" font-size="25" font-weight="700">Delivery and runtime</text>
+    <text x="1152" y="52" fill="#d7b572" font-family="monospace" font-size="13" text-anchor="end">SOURCE-DERIVED / 08 SEP 2026</text>
+
+    <rect x="38" y="82" width="1124" height="274" rx="16" fill="#0d1928" stroke="#2b3d50"/>
+    <text x="64" y="116" fill="#75dbed" font-family="monospace" font-size="14" font-weight="700" letter-spacing="1.5">DELIVERY PLANE</text>
+
+    <rect x="70" y="158" width="178" height="82" rx="12" fill="#101d2d" stroke="#d7b572"/>
+    <text x="159" y="190" fill="#d7b572" font-size="15" font-weight="700" text-anchor="middle">GitHub main</text>
+    <text x="159" y="216" fill="#acbdca" font-family="monospace" font-size="12" text-anchor="middle">push / dispatch</text>
+
+    <path d="M248 180H330" fill="none" stroke="#75dbed" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+    <path d="M289 180V294H330" fill="none" stroke="#75dbed" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+    <rect x="342" y="136" width="260" height="90" rx="12" fill="#101d2d" stroke="#75dbed"/>
+    <text x="364" y="165" fill="#75dbed" font-size="14" font-weight="700">CI / quality</text>
+    <text x="364" y="191" fill="#eef3f6" font-family="monospace" font-size="13">npm ci → 57 tests</text>
+    <text x="364" y="211" fill="#acbdca" font-family="monospace" font-size="12">lint → production build</text>
+
+    <rect x="342" y="250" width="260" height="90" rx="12" fill="#101d2d" stroke="#75dbed"/>
+    <text x="364" y="279" fill="#75dbed" font-size="14" font-weight="700">Pages deployment</text>
+    <text x="364" y="305" fill="#eef3f6" font-family="monospace" font-size="13">tests → lint → build</text>
+    <text x="364" y="325" fill="#acbdca" font-family="monospace" font-size="12">dist → Pages artifact</text>
+
+    <path d="M602 295H696" fill="none" stroke="#d7b572" stroke-width="2" marker-end="url(#arrow-gold)"/>
+    <rect x="708" y="250" width="214" height="90" rx="12" fill="#142a35" stroke="#d7b572"/>
+    <text x="815" y="280" fill="#d7b572" font-size="14" font-weight="700" text-anchor="middle">GitHub Pages project site</text>
+    <text x="815" y="306" fill="#eef3f6" font-family="monospace" font-size="12" text-anchor="middle">static dist / repository base</text>
+    <text x="815" y="326" fill="#acbdca" font-family="monospace" font-size="11" text-anchor="middle">/egypt-salary-calculator/</text>
+
+    <rect x="952" y="250" width="176" height="90" rx="12" fill="#101d2d" stroke="#485d70" stroke-dasharray="6 5"/>
+    <text x="1040" y="280" fill="#eef3f6" font-size="14" font-weight="700" text-anchor="middle">Optional API</text>
+    <text x="1040" y="305" fill="#acbdca" font-family="monospace" font-size="12" text-anchor="middle">not hosted by Pages</text>
+    <text x="1040" y="325" fill="#8ca2b4" font-family="monospace" font-size="11" text-anchor="middle">separate deployment required</text>
+
+    <rect x="38" y="382" width="1124" height="318" rx="16" fill="#0d1928" stroke="#2b3d50"/>
+    <text x="64" y="416" fill="#75dbed" font-family="monospace" font-size="14" font-weight="700" letter-spacing="1.5">RUNTIME PLANE</text>
+
+    <rect x="70" y="478" width="170" height="88" rx="44" fill="#101d2d" stroke="#d7b572"/>
+    <text x="155" y="512" fill="#d7b572" font-size="15" font-weight="700" text-anchor="middle">Browser</text>
+    <text x="155" y="538" fill="#acbdca" font-family="monospace" font-size="12" text-anchor="middle">Arabic RTL interface</text>
+
+    <path d="M240 500H322" fill="none" stroke="#75dbed" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+    <text x="281" y="486" fill="#8ca2b4" font-family="monospace" font-size="11" text-anchor="middle">STATIC APP</text>
+
+    <rect x="334" y="454" width="250" height="136" rx="14" fill="#142a35" stroke="#75dbed"/>
+    <text x="459" y="485" fill="#75dbed" font-size="15" font-weight="700" text-anchor="middle">React + TypeScript client</text>
+    <rect x="362" y="506" width="194" height="52" rx="9" fill="#09111e" stroke="#d7b572"/>
+    <text x="459" y="528" fill="#d7b572" font-family="monospace" font-size="12" text-anchor="middle">SALARY ENGINE</text>
+    <text x="459" y="547" fill="#eef3f6" font-family="monospace" font-size="11" text-anchor="middle">runs locally / salary stays here</text>
+    <text x="459" y="577" fill="#8ca2b4" font-family="monospace" font-size="11" text-anchor="middle">served as static GitHub Pages assets</text>
+
+    <path d="M584 522H670" fill="none" stroke="#75dbed" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-cyan)"/>
+    <text x="627" y="508" fill="#8ca2b4" font-family="monospace" font-size="11" text-anchor="middle">OPTIONAL API</text>
+
+    <rect x="682" y="454" width="214" height="136" rx="14" fill="#101d2d" stroke="#75dbed" stroke-dasharray="6 5"/>
+    <text x="789" y="484" fill="#75dbed" font-size="15" font-weight="700" text-anchor="middle">.NET 10 Function</text>
+    <text x="789" y="511" fill="#eef3f6" font-family="monospace" font-size="12" text-anchor="middle">anonymous HTTP GET</text>
+    <text x="789" y="534" fill="#acbdca" font-family="monospace" font-size="12" text-anchor="middle">5 s upstream timeout</text>
+    <text x="789" y="557" fill="#acbdca" font-family="monospace" font-size="12" text-anchor="middle">response validation</text>
+    <text x="789" y="578" fill="#8ca2b4" font-family="monospace" font-size="11" text-anchor="middle">not configured for Pages</text>
+
+    <path d="M896 501H968" fill="none" stroke="#75dbed" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+    <rect x="980" y="454" width="148" height="88" rx="12" fill="#101d2d" stroke="#d7b572"/>
+    <text x="1054" y="487" fill="#d7b572" font-size="14" font-weight="700" text-anchor="middle">Frankfurter</text>
+    <text x="1054" y="513" fill="#acbdca" font-family="monospace" font-size="12" text-anchor="middle">USD / EGP rate</text>
+
+    <path d="M789 590V637H968" fill="none" stroke="#485d70" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-cyan)"/>
+    <rect x="980" y="598" width="148" height="74" rx="12" fill="#101d2d" stroke="#485d70" stroke-dasharray="6 5"/>
+    <text x="1054" y="626" fill="#eef3f6" font-size="14" font-weight="700" text-anchor="middle">Azure Monitor</text>
+    <text x="1054" y="651" fill="#8ca2b4" font-family="monospace" font-size="11" text-anchor="middle">when configured</text>
+  </g>
+</svg>

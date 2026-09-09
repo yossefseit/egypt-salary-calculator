@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="330" viewBox="0 0 1200 330" role="img" aria-labelledby="title desc">
+  <title id="title">Egypt Salary Calculator</title>
+  <desc id="desc">Original infrastructure command centre header for Yossef Mohammed Ali's Arabic salary calculator and static GitHub Pages delivery project.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#2b3d50" stroke-width=".5" opacity=".3"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="330" rx="18" fill="#09111e"/>
+  <rect width="1200" height="330" rx="18" fill="url(#grid)"/>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <g transform="translate(70 65)" fill="none" stroke="#d7b572" stroke-width="2">
+      <circle r="26"/>
+      <path d="M-14-11-7 0 0-11M-7 0V13M4 13V-11L12 2 20-11V13"/>
+      <path d="M0-33V-29M33 0H29M0 33V29M-33 0H-29"/>
+    </g>
+    <text x="117" y="62" fill="#d7b572" font-size="16" font-weight="600" letter-spacing="2">YOSSEF MOHAMMED ALI</text>
+    <text x="117" y="85" fill="#acbdca" font-size="13" letter-spacing="2">APPLICATION DELIVERY / 01</text>
+
+    <text x="44" y="161" fill="#eef3f6" font-size="45" font-weight="700">Egypt Salary</text>
+    <text x="44" y="214" fill="#eef3f6" font-size="45" font-weight="700">Calculator</text>
+    <path d="M44 244H670" fill="none" stroke="#2b3d50" stroke-width="2"/>
+    <text x="44" y="280" fill="#75dbed" font-family="monospace" font-size="17">REACT / TYPESCRIPT / GITHUB PAGES / 57 TESTS</text>
+
+    <rect x="790" y="57" width="340" height="216" rx="16" fill="#101d2d" stroke="#2b3d50" stroke-width="2"/>
+    <circle cx="822" cy="84" r="6" fill="#d7b572"/>
+    <circle cx="844" cy="84" r="6" fill="#75dbed"/>
+    <circle cx="866" cy="84" r="6" fill="#4c6479"/>
+    <text x="1098" y="90" fill="#8ca2b4" font-family="monospace" font-size="12" text-anchor="end">GROSS → NET</text>
+    <line x1="814" y1="111" x2="1106" y2="111" stroke="#2b3d50"/>
+    <text x="814" y="144" fill="#8ca2b4" font-size="13">INPUT</text>
+    <text x="1106" y="144" fill="#eef3f6" font-family="monospace" font-size="18" font-weight="700" text-anchor="end">EGP 10,000.00</text>
+    <rect x="814" y="164" width="292" height="72" rx="10" fill="#142a35" stroke="#75dbed"/>
+    <text x="836" y="190" fill="#75dbed" font-size="12" letter-spacing="1.5">ESTIMATED NET</text>
+    <text x="1084" y="218" fill="#eef3f6" font-family="monospace" font-size="27" font-weight="700" text-anchor="end">EGP 8,302.50</text>
+    <path d="M874 273v20h172v-20" fill="none" stroke="#d7b572" stroke-width="2"/>
+    <circle cx="960" cy="293" r="5" fill="#d7b572"/>
+  </g>
+</svg>
