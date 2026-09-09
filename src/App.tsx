@@ -329,6 +329,7 @@ function App() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
   const [exchangeRateState, setExchangeRateState] =
     useState<ExchangeRateViewState>({ status: 'loading' })
+  const [exchangeRateAttempt, setExchangeRateAttempt] = useState(0)
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -339,7 +340,9 @@ function App() {
 
     void getUsdEgpRate(controller.signal)
       .then((data) => {
-        setExchangeRateState({ status: 'success', data })
+        if (!controller.signal.aborted) {
+          setExchangeRateState({ status: 'success', data })
+        }
       })
       .catch(() => {
         if (!controller.signal.aborted) {
@@ -348,7 +351,7 @@ function App() {
       })
 
     return () => controller.abort()
-  }, [])
+  }, [exchangeRateAttempt])
 
   const calculationState = useMemo(
     () =>
@@ -606,7 +609,19 @@ function App() {
                       <span>جارٍ تحميل سعر الدولار…</span>
                     )}
                     {exchangeRateState.status === 'error' && (
-                      <span>تعذر تحميل سعر الدولار حاليًا.</span>
+                      <>
+                        <span>تعذر تحميل سعر الدولار حاليًا. حساب الجنيه متاح.</span>
+                        <button
+                          className="rate-retry"
+                          type="button"
+                          onClick={() => {
+                            setExchangeRateState({ status: 'loading' })
+                            setExchangeRateAttempt((attempt) => attempt + 1)
+                          }}
+                        >
+                          إعادة تحميل سعر الدولار
+                        </button>
+                      </>
                     )}
                     {exchangeRateState.status === 'success' && (
                       <>
@@ -627,6 +642,8 @@ function App() {
                           1 USD = EGP {exchangeRateState.data.rate} ·{' '}
                           {exchangeRateState.data.date}
                         </span>
+                        <span lang="en" dir="ltr">{exchangeRateState.data.source}</span>
+                        <span>قيمة استرشادية حسب تاريخ السعر، وقد تختلف عن سعر البنك.</span>
                       </>
                     )}
                   </div>

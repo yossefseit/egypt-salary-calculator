@@ -19,7 +19,7 @@ npm ci
 npm run dev
 ```
 
-Open the URL Vite prints, normally `http://localhost:5173/egypt-salary-calculator/`. The Vite server proxies `/api` to `http://localhost:7071`. If the Function is not running, the page reports that the exchange rate is unavailable and continues to calculate in EGP.
+Open the URL Vite prints, normally `http://localhost:5173/egypt-salary-calculator/`. With no environment override, the browser retrieves a public Frankfurter USD/EGP reference rate directly. If the provider fails or the request exceeds eight seconds, EGP remains available and the interface offers a retry. No salary data is sent.
 
 To inspect the production bundle locally:
 
@@ -55,7 +55,7 @@ dotnet restore
 func start --port 7071
 ```
 
-The endpoint is `http://localhost:7071/api/GetUsdEgpRate`. The Function needs outbound HTTPS access to `api.frankfurter.dev`. `APPLICATIONINSIGHTS_CONNECTION_STRING` is optional; omit it for a local session without Azure Monitor export.
+The endpoint is `http://localhost:7071/api/GetUsdEgpRate`. To opt into the existing Vite `/api` proxy, put `VITE_API_BASE_URL=http://localhost:5173` in an ignored `.env.local` and restart Vite. Adjust that origin if Vite selected a different port. The proxy forwards `/api` to port 7071. The Function needs outbound HTTPS access to `api.frankfurter.dev`. `APPLICATIONINSIGHTS_CONNECTION_STRING` is optional; omit it for a local session without Azure Monitor export.
 
 ## Validate a change
 
@@ -74,20 +74,22 @@ The workflow [`.github/workflows/deploy-pages.yml`](../.github/workflows/deploy-
 
 - checks out the exact repository revision;
 - installs the locked npm dependency graph;
-- requires all 57 tests, Oxlint and the production build to pass;
+- requires all 80 tests, Oxlint and the production build to pass;
 - uploads only `dist/` as the Pages artifact; and
 - deploys through the `github-pages` environment only when the selected ref is `main`.
 
 For a new repository, open **Settings → Pages** and select **GitHub Actions** as the source. This setting was confirmed for this repository on 9 September 2026. The live project URL is `https://yossefseit.github.io/egypt-salary-calculator/`; [Pages run 34370072295](https://github.com/yossefseit/egypt-salary-calculator/actions/runs/34370072295) published the production bundle on 9 September 2026 at 15:25 UTC. See the [dated deployment and browser evidence](validation.md). The deployment job has only the `pages: write` and `id-token: write` permissions required by GitHub Pages; the build job has read-only access to repository contents and Pages metadata.
 
-The workflow intentionally leaves `VITE_API_BASE_URL` unset. GitHub Pages is a static host and cannot execute the .NET Function in `api/`. As a result, the published client keeps its local EGP calculation behavior and shows the existing unavailable message for USD conversion. If the Function is hosted separately later, configure its cross-origin policy for the Pages origin and review its availability before supplying that origin at build time.
+The workflow intentionally leaves `VITE_API_BASE_URL` unset, selecting the public browser endpoint `https://api.frankfurter.dev/v2/rate/USD/EGP`. Frankfurter supports browser CORS without an API key. The interface validates and displays the source and date; these are indicative reference rates and may differ from current bank quotes. The eight-second request timeout is recoverable using the retry button. Salary input stays local.
+
+GitHub Pages cannot execute `api/`. A separately hosted Function remains an optional override: configure its CORS policy for the Pages origin and set `VITE_API_BASE_URL` to that origin at build time. The override must serve the existing `/api/GetUsdEgpRate` response contract. Never put secrets in `VITE_*` values, which are included in the public bundle. No API key, Azure resource or cloud credential is needed for the default path.
 
 ## Smoke checks after an authorized deployment
 
 1. Open the deployed page and confirm the Arabic RTL interface renders without console errors.
 2. Enter EGP 10,000 as monthly gross with automatic insurance and confirm the reference net is EGP 8,302.50.
 3. Switch monthly/yearly, calculation direction, insurance mode and theme; refresh once to confirm theme persistence.
-4. Confirm the calculator shows its EGP result and the expected unavailable-rate message; a Pages deployment alone does not provide the Function.
+4. Confirm the displayed USD amount equals the selected EGP result divided by the fetched rate, rounded to two decimals; verify the provider name and response date. Simulate a blocked provider request, confirm EGP still works, then unblock and use the retry button.
 5. Record the workflow URL, commit SHA, UTC time, destination and sanitized smoke-check results.
 
 These checks do not replace payroll-domain review.

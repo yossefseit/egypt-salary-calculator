@@ -1,10 +1,18 @@
 # Validation evidence
 
-**Project status:** 57 tests passing; deployed to GitHub Pages.
+**Project status:** 80 tests passing; deployed to GitHub Pages.
 
-The evidence below separates source validation, successful static delivery, historical Azure evidence and the optional unhosted API.
+The evidence below separates source validation, successful static delivery, historical Azure evidence and the optional rate lookup. The default client now fetches Frankfurter directly; the separately hosted Function is an optional override.
 
-## Evidence ledger
+## USD correction reviewed 9 September 2026
+
+The corrected production bundle passed 80 tests: 48 domain, 11 interface and 21 exchange-rate service checks. Tests cover direct provider and explicit Function modes, currency/rate/date validation, HTTP/network failures, malformed JSON, timeout, cancellation, and successful retry without losing the EGP result. Oxlint and the TypeScript/Vite production build passed.
+
+The [production-preview report](evidence/usd-preview-2026-09-09.json) records real browser calls to Frankfurter at 1440 × 1000 and 390 × 844. The returned rate was 51.115 EGP per USD dated 9 September: EGP 8,302.50 displayed as approximately USD 162.43. Source/date display, annual conversion and recovery after a simulated outage passed; no salary data was transmitted. Axe reported no violations, and both widths had no overflow or unexpected browser failures.
+
+[USD desktop preview](assets/usd-preview-application-desktop.png) · [USD mobile preview](assets/usd-preview-application-mobile.png). These captures validate the corrected production bundle; exact deployed revisions are recorded by the [Pages workflow](https://github.com/yossefseit/egypt-salary-calculator/actions/workflows/deploy-pages.yml).
+
+## Earlier migration evidence ledger
 
 | Evidence | Result | Limit |
 | --- | --- | --- |
@@ -35,7 +43,8 @@ dotnet build api/api.csproj
 The expected JavaScript test split is:
 
 - `src/domain/salaryCalculator.test.ts`: 48 tests covering insurance limits, tax boundaries, annual rounding, gross-to-net, net-to-gross and invalid inputs.
-- `src/App.test.tsx`: nine tests covering the reference result, USD display, formatted input, period conversion, reverse calculation, theme persistence, validation and the empty state.
+- `src/App.test.tsx`: 11 tests covering the reference result, USD display and retry, rate failure, formatted input, period conversion, reverse calculation, theme persistence, validation and the empty state.
+- `src/services/exchangeRate.test.ts`: 21 tests covering provider/Function contracts, invalid rates/dates/currency pairs, network/HTTP/JSON errors, timeout, cancellation and cleanup.
 
 Review the [desktop](assets/pages-application-desktop.png) and [mobile](assets/pages-application-mobile.png) production previews from 9 September.
 
@@ -61,6 +70,6 @@ The Pages workflow does not build or deploy the Function. The linked historical 
 
 The live client URL is `https://yossefseit.github.io/egypt-salary-calculator/`. The repository owner selected **GitHub Actions** as the Pages source, verified through the Pages API on 9 September 2026. The successful production deployment above replaced the older unbuilt source page. Live browser checks at desktop and mobile widths confirmed that production JavaScript and CSS load under `/egypt-salary-calculator/assets/` and the calculator renders and calculates in EGP.
 
-GitHub Pages cannot host the optional .NET Function. Without a separately hosted and configured API, the public client shows the reference-rate unavailable state while continuing to calculate salaries in EGP. The linked case study is maintained in the separate [portfolio repository](https://github.com/yossefseit/yossefseit.github.io).
+GitHub Pages cannot host the optional .NET Function. With no API override, the client requests the public Frankfurter rate directly, displays its source/date, and calculates the USD estimate locally. If the provider fails, a retry action is available while EGP calculations continue. No separately hosted API is required for the default path. The linked case study is maintained in the separate [portfolio repository](https://github.com/yossefseit/yossefseit.github.io).
 
 [Back to README](../README.md) · [Architecture](architecture.md) · [Operations](operations.md)

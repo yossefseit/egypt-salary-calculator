@@ -90,6 +90,7 @@
   transform: translate(-0.28rem, -0.18rem);
 }
 
+.rate-retry:focus-visible,
 .theme-toggle:focus-visible,
 .source-links a:focus-visible {
   outline: 3px solid var(--color-focus);
@@ -394,6 +395,24 @@
 .result-highlight .usd-equivalent span {
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.rate-retry {
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.75rem;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.rate-retry:hover {
+  border-color: var(--color-accent);
 }
 
 .summary-grid {
